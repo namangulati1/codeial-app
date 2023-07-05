@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { useNavigate } from 'react-router-dom';
 import { useToasts } from "react-toast-notifications";
 
@@ -14,7 +14,6 @@ const Signup = () => {
     const { addToast } = useToasts();
     const auth = useAuth();
     const navigate = useNavigate();
-    console.log(navigate);
 
     const handleFormSubmit = async (e) => {
         e.preventDefault();
@@ -56,6 +55,11 @@ const Signup = () => {
         }
         setSigningUp(false);
     }
+    useEffect(() => {
+      if (auth.user) {
+          navigate('/');
+      }
+  }, [auth.user, navigate]);
     return (
         <form className={styles.loginForm} onSubmit={handleFormSubmit}>
           <span className={styles.loginSignupHeader}> Signup</span>
