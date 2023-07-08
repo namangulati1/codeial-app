@@ -1,13 +1,15 @@
 import PropTypes from 'prop-types';
 import { useState, useEffect } from 'react';
-import { NavLink } from 'react-router-dom';
-import { Comment, Loader } from '../components';
+import { Link } from 'react-router-dom';
+import { Comment, FriendsList, Loader } from '../components';
 import { getPosts } from '../api';
 import styles from '../styles/home.module.css';
+import { useAuth } from '../hooks';
 
 const Home = () => {
     const [posts, setPosts] = useState([]);
     const [loading, setLoading] = useState([]);
+    const auth = useAuth();
     useEffect(() => {
         const fetchPosts = async () => {
         const response = await getPosts();
@@ -23,7 +25,8 @@ const Home = () => {
         return <Loader />
     }
     return (
-        <div className={styles.postList}>
+        <div className={styles.home}>
+        <div className={styles.postsList}>
             {posts.map(post => 
             <div className={styles.postWrapper} key={`post-${post._id}`}>
                 <div className={styles.postHeader}>
@@ -33,8 +36,12 @@ const Home = () => {
                             alt="user-pic"
                         />
                         <div>
-                            <NavLink to={`/user/${post.user._id}`} className={styles.postAuthor}>{post.user.name}
-                            </NavLink>
+                            <Link 
+                            to={`/user/${post.user._id}`} 
+                            state={{user: post.user}} 
+                            className={styles.postAuthor}>
+                            {post.user.name}
+                            </Link>
                             <span className={styles.postTime}>a minute ago</span>
                         </div>
                     </div>
@@ -66,6 +73,8 @@ const Home = () => {
                 </div>
             </div>
             )}
+        </div>
+        {auth.user && <FriendsList />}
         </div>
     );
 };
