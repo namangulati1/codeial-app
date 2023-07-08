@@ -8,7 +8,7 @@ import { Comment } from './';
 import { createComment, toggleLike } from '../api';
 
 const Post = ({ post }) => {
-    console.log(post);
+    //console.log(post);
     const [comment, setComment] = useState('');
     const [creatingComment, setCreatingComment] = useState(false);
     const posts = usePosts();
